@@ -1,0 +1,25 @@
+{
+  "name": "@lennym/ciaudit",
+  "version": "1.0.0",
+  "description": "Wrapper for npm audit to allow configurable vlun levels",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lennym/npm-audit.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lennym/npm-audit/issues"
+  },
+  "homepage": "https://github.com/lennym/npm-audit#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "minimist": "^1.2.0"
+  }
+}
