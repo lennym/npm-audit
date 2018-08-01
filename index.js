@@ -13,9 +13,6 @@ module.exports = options => {
 
   console.log(`Scanning for vulnerabilities...`);
   exec('npm audit --json', (err, stdout, stderr) => {
-    if (err) {
-      throw err;
-    }
     const response = JSON.parse(stdout);
     const vulns = response.metadata.vulnerabilities;
     const failed = levels.reduce((count, level, i) => {

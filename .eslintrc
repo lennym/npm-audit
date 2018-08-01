@@ -1,2 +1,4 @@
 extends:
   - lennym
+rules:
+  handle-callback-err: 0
