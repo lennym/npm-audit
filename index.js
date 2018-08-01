@@ -13,12 +13,15 @@ module.exports = options => {
 
   console.log(`Scanning for vulnerabilities...`);
   exec('npm audit --json', (err, stdout, stderr) => {
+    if (err) {
+      throw err;
+    }
     const response = JSON.parse(stdout);
     const vulns = response.metadata.vulnerabilities;
     const failed = levels.reduce((count, level, i) => {
       console.log(`${level}: ${' '.repeat(10 - level.length)}${vulns[level]}`);
       if (i >= levels.indexOf(baseLevel)) {
-        return count + vulns[level]);
+        return count + vulns[level];
       }
       return count;
     }, 0);
