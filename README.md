@@ -12,5 +12,5 @@ npx @lennym/ciaudit
 To set a custom threshold:
 
 ```
-npx @lennym/ciaudit -- --level moderate
+npx @lennym/ciaudit --level moderate
 ```
