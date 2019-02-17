@@ -1,10 +1,10 @@
 {
   "name": "@innovid/npm-audit",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Wrapper for npm audit to allow configurable vlun levels",
   "main": "index.js",
   "bin": {
-    "ciaudit": "./bin/npm-audit"
+    "ciaudit": "./bin/ciaudit"
   },
   "scripts": {
     "test": "eslint .",
@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/innovid/npm-audit#readme",
   "publishConfig": {
-    "access": "public"
+    "access": "restricted"
   },
   "dependencies": {
     "minimist": "^1.2.0"
