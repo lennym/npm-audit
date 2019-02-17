@@ -1,10 +1,10 @@
 {
-  "name": "@lennym/ciaudit",
+  "name": "@innovid/npm-audit",
   "version": "1.0.6",
   "description": "Wrapper for npm audit to allow configurable vlun levels",
   "main": "index.js",
   "bin": {
-    "ciaudit": "./bin/ciaudit"
+    "ciaudit": "./bin/npm-audit"
   },
   "scripts": {
     "test": "eslint .",
@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lennym/npm-audit.git"
+    "url": "git://github.com/innovid/npm-audit.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/lennym/npm-audit/issues"
+    "url": "https://github.com/innovid/npm-audit/issues"
   },
-  "homepage": "https://github.com/lennym/npm-audit#readme",
+  "homepage": "https://github.com/innovid/npm-audit#readme",
   "publishConfig": {
     "access": "public"
   },

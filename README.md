@@ -6,11 +6,11 @@ Wrapper for npm audit to allow configurable vuln levels
 To run an `npm audit` with a default `high` threshold for vulnerabilities:
 
 ```
-npx @lennym/ciaudit
+npx @innovid/ciaudit
 ```
 
 To set a custom threshold:
 
 ```
-npx @lennym/ciaudit --level moderate
+npx @innovid/ciaudit --level moderate
 ```
