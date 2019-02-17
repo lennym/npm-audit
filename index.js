@@ -1,9 +1,8 @@
-const { exec } = require('child_process');
+const {spawnSync} = require('child_process');
 
 const levels = ['low', 'moderate', 'high', 'critical'];
 
 module.exports = options => {
-
   const baseLevel = options.level || 'high';
 
   if (levels.indexOf(baseLevel) === -1) {
@@ -12,8 +11,13 @@ module.exports = options => {
   }
 
   console.log(`Scanning for vulnerabilities...`);
-  exec('npm audit --json', (err, stdout, stderr) => {
-    const response = JSON.parse(stdout);
+  try {
+    const {stdout, stderr} = spawnSync('npm', ['audit', '--json']);
+    if (stderr.toString() !== '') {
+      console.error(stderr.toString());
+      process.exit(1);
+    }
+    const response = JSON.parse(stdout.toString());
     const vulns = response.metadata.vulnerabilities;
     const failed = levels.reduce((count, level, i) => {
       console.log(`${level}: ${' '.repeat(10 - level.length)}${vulns[level]}`);
@@ -28,6 +32,8 @@ module.exports = options => {
       process.exit(1);
     }
     console.log(`No vulnerabilities of level "${baseLevel}" or above detected.`);
-  });
-
+  } catch (e) {
+    console.error(e);
+    process.exit(e.code || 1);
+  }
 };

@@ -1,6 +1,6 @@
 {
   "name": "@lennym/ciaudit",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Wrapper for npm audit to allow configurable vlun levels",
   "main": "index.js",
   "bin": {
@@ -27,6 +27,7 @@
     "minimist": "^1.2.0"
   },
   "devDependencies": {
+    "@innovid/eslint-config-innovid-angular": "0.0.8",
     "eslint": "^5.2.0",
     "eslint-config-lennym": "^2.0.1"
   }
