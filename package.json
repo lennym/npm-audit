@@ -1,7 +1,7 @@
 {
   "name": "@innovid/npm-audit",
   "version": "1.0.7",
-  "description": "Wrapper for npm audit to allow configurable vlun levels",
+  "description": "Wrapper for npm audit to allow configurable vulnerabilities levels",
   "main": "index.js",
   "bin": {
     "ciaudit": "./bin/ciaudit"
