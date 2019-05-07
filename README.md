@@ -14,3 +14,10 @@ To set a custom threshold:
 ```
 npx @lennym/ciaudit --level moderate
 ```
+
+To retry when audit fails with `ENOAUDIT` (frequently the result of issues with npm infrastructure):
+
+```
+npx @lennym/ciaudit --retries 3
+```
+
