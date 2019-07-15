@@ -15,16 +15,31 @@ const audit = options => {
     console.error(` --level should be one of ${levels.join(', ')}`);
   }
 
-  console.log(`Scanning for vulnerabilities...`);
-  exec('npm audit --json', (err, stdout, stderr) => {
-    const response = JSON.parse(stdout);
-
-    if (response.error && response.error.code === 'ENOAUDIT' && options.retryCount < options.retries) {
-      console.log(`Received ENOAUDIT error. Retrying... attempt ${options.retryCount + 1} of ${options.retries}`);
-      return setTimeout(() => audit({
+  const restart = () => {
+    if (options.retryCount < options.retries) {
+      console.log(`Retrying... attempt ${options.retryCount + 1} of ${options.retries}`);
+      setTimeout(() => audit({
         ...options,
         retryCount: options.retryCount + 1
       }), options.wait);
+    }
+    console.log('Retry count exceeded. Exiting...');
+    process.exit(1);
+  }
+
+  console.log(`Scanning for vulnerabilities...`);
+  exec('npm audit --json', (err, stdout, stderr) => {
+    let response;
+    try {
+      response = JSON.parse(stdout);
+    } catch (e) {
+      console.log('Could not parse JSON output.');
+      return restart();
+    }
+
+    if (response.error && response.error.code === 'ENOAUDIT') {
+      console.log('Received ENOAUDIT error.');
+      return restart();
     }
 
     const vulns = response.metadata.vulnerabilities;
