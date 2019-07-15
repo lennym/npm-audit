@@ -27,7 +27,7 @@
     "minimist": "^1.2.0"
   },
   "devDependencies": {
-    "eslint": "^5.2.0",
+    "eslint": "5.16.0",
     "eslint-config-lennym": "^2.0.1"
   }
 }
