@@ -30,22 +30,26 @@ const audit = options => {
   };
 
   const exec = () => {
-    return new Promise((resolve, reject) => {
+    const result = new Promise((resolve, reject) => {
       let response = '';
       const proc = spawn('npm', ['audit', '--json']);
 
-      proc.stdout.on('data', chunk => response += chunk);
+      proc.stdout.on('data', chunk => {
+        response += chunk;
+      });
 
       proc.on('error', reject);
       proc.on('close', () => resolve(response));
-    })
-    .then(response => {
-      try {
-        return JSON.parse(response);
-      } catch (e) {
-        return restart(e);
-      }
     });
+
+    return result
+      .then(response => {
+        try {
+          return JSON.parse(response);
+        } catch (e) {
+          return restart(e);
+        }
+      });
   };
 
   const parse = json => {
