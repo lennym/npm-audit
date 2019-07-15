@@ -25,7 +25,7 @@ const audit = options => {
     }
     console.log('Retry count exceeded. Exiting...');
     process.exit(1);
-  }
+  };
 
   console.log(`Scanning for vulnerabilities...`);
   exec('npm audit --json', (err, stdout, stderr) => {
