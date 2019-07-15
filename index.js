@@ -18,7 +18,7 @@ const audit = options => {
   const restart = () => {
     if (options.retryCount < options.retries) {
       console.log(`Retrying... attempt ${options.retryCount + 1} of ${options.retries}`);
-      setTimeout(() => audit({
+      return setTimeout(() => audit({
         ...options,
         retryCount: options.retryCount + 1
       }), options.wait);
