@@ -1,4 +1,4 @@
-const { exec } = require('child_process');
+const { spawn } = require('child_process');
 
 const levels = ['low', 'moderate', 'high', 'critical'];
 
@@ -15,7 +15,10 @@ const audit = options => {
     console.error(` --level should be one of ${levels.join(', ')}`);
   }
 
-  const restart = () => {
+  const restart = e => {
+    if (options.retries === 1) {
+      throw e;
+    }
     if (options.retryCount < options.retries) {
       console.log(`Retrying... attempt ${options.retryCount + 1} of ${options.retries}`);
       return setTimeout(() => audit({
@@ -23,26 +26,36 @@ const audit = options => {
         retryCount: options.retryCount + 1
       }), options.wait);
     }
-    console.log('Retry count exceeded. Exiting...');
-    process.exit(1);
+    throw new Error('Retry count exceeded. Exiting...');
   };
 
-  console.log(`Scanning for vulnerabilities...`);
-  exec('npm audit --json', (err, stdout, stderr) => {
-    let response;
-    try {
-      response = JSON.parse(stdout);
-    } catch (e) {
-      console.log('Could not parse JSON output.');
-      return restart();
-    }
+  const exec = () => {
+    return new Promise((resolve, reject) => {
+      let response = '';
+      const proc = spawn('npm', ['audit', '--json']);
 
-    if (response.error && response.error.code === 'ENOAUDIT') {
+      proc.stdout.on('data', chunk => response += chunk);
+
+      proc.on('error', reject);
+      proc.on('close', () => resolve(response));
+    })
+    .then(response => {
+      try {
+        return JSON.parse(response);
+      } catch (e) {
+        return restart(e);
+      }
+    });
+  };
+
+  const parse = json => {
+
+    if (json.error && json.error.code === 'ENOAUDIT') {
       console.log('Received ENOAUDIT error.');
       return restart();
     }
 
-    const vulns = response.metadata.vulnerabilities;
+    const vulns = json.metadata.vulnerabilities;
     const failed = levels.reduce((count, level, i) => {
       console.log(`${level}: ${' '.repeat(10 - level.length)}${vulns[level]}`);
       if (i >= levels.indexOf(baseLevel)) {
@@ -52,11 +65,18 @@ const audit = options => {
     }, 0);
     console.log();
     if (failed) {
-      console.log(`${failed} vulnerabilitie(s) of level "${baseLevel}" or above detected.`);
-      process.exit(1);
+      throw new Error(`${failed} vulnerabilitie(s) of level "${baseLevel}" or above detected.`);
     }
-    console.log(`No vulnerabilities of level "${baseLevel}" or above detected.`);
-  });
+
+  };
+
+  console.log(`Scanning for vulnerabilities...`);
+
+  return Promise.resolve()
+    .then(() => exec())
+    .then(json => parse(json))
+    .then(() => console.log(`No vulnerabilities of level "${baseLevel}" or above detected.`))
+    .catch(e => console.error(e.message));
 
 };
 
