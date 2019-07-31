@@ -69,7 +69,8 @@ const audit = options => {
     }, 0);
     console.log();
     if (failed) {
-      throw new Error(`${failed} vulnerabilitie(s) of level "${baseLevel}" or above detected.`);
+      console.error(`${failed} vulnerabilitie(s) of level "${baseLevel}" or above detected.`);
+      process.exit(1);
     }
 
   };
@@ -80,7 +81,10 @@ const audit = options => {
     .then(() => exec())
     .then(json => parse(json))
     .then(() => console.log(`No vulnerabilities of level "${baseLevel}" or above detected.`))
-    .catch(e => console.error(e.message));
+    .catch(e => {
+      console.error(e.message);
+      process.exit(1);
+    });
 
 };
 
