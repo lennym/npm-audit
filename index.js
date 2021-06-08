@@ -32,7 +32,13 @@ const audit = options => {
   const exec = () => {
     const result = new Promise((resolve, reject) => {
       let response = '';
-      const proc = spawn('npm', ['audit', '--json']);
+      const opts = ['audit', '--json'];
+
+      if (options.production) {
+        opts.push('--production');
+      }
+
+      const proc = spawn('npm', opts);
 
       proc.stdout.on('data', chunk => {
         response += chunk;
